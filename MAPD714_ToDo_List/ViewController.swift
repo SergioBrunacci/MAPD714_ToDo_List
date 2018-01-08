@@ -8,6 +8,8 @@
 
 import UIKit
 
+private var todoItems = ToDoItem.getMockData()
+
 class ViewController: UITableViewController {
 
     override func viewDidLoad() {
@@ -18,6 +20,29 @@ class ViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return todoItems.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell_todo", for: indexPath)
+        
+        if indexPath.row < todoItems.count
+        {
+            let item = todoItems[indexPath.row]
+            cell.textLabel?.text = item.title
+            
+            let accessory: UITableViewCellAccessoryType = item.done ? .checkmark : .none
+            cell.accessoryType = accessory
+        }
+        
+        return cell
     }
 
 
