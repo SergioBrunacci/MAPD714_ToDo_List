@@ -95,6 +95,16 @@ class ViewController: UITableViewController {
         //Tell the table view
         tableView.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .top)
     }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath)
+    {
+        if indexPath.row < todoItems.count
+        {
+            todoItems.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .top)
+        }
+    }
+    
 
 }
 
