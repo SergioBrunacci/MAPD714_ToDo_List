@@ -8,7 +8,7 @@
 
 import UIKit
 
-private var todoItems = ToDoItem.getMockData()
+private var todoItems = [ToDoItem]()
 
 class ViewController: UITableViewController {
 
