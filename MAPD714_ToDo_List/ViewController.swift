@@ -173,6 +173,26 @@ class ViewController: UITableViewController {
     {
         ToDoItem.writePersistence()
     }
+    
+    
+    override func tableView(_ tableView: UITableView,
+                   leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+    {
+        let closeAction = UIContextualAction(style: .normal, title:  "Complete", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+            print("OK, marked as Closed")
+            ToDoItem.completeRow(Row:indexPath.row)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell_todo", for: indexPath)
+            cell.backgroundColor = .green
+            self.tableView.reloadData()
+            success(true)
+        })
+        closeAction.image = UIImage(named: "tick")
+        closeAction.backgroundColor = .green
+        
+        return UISwipeActionsConfiguration(actions: [closeAction])
+        
+    }
+    
 
 }
 
