@@ -10,12 +10,22 @@ import Foundation
 
 class ToDoItem: NSObject, NSCoding
 {
+    static let sharedToDoList = [ToDoItem]()
+    
+    
+    
     var title: String
+    var notes: String
     var done: Bool
     
-    public init(title: String)
+    
+    
+    public init(title: String, notes: String)
     {
+        
+        
         self.title = title
+        self.notes = notes
         self.done = false
     }
     
@@ -29,6 +39,17 @@ class ToDoItem: NSObject, NSCoding
         else
         {
             // There were no objects encoded with the key "title",
+            // so that's an error.
+            return nil
+        }
+        
+        if let notes = aDecoder.decodeObject(forKey: "notes") as? String
+        {
+            self.notes = notes
+        }
+        else
+        {
+            // There were no objects encoded with the key "notes",
             // so that's an error.
             return nil
         }
@@ -49,11 +70,13 @@ class ToDoItem: NSObject, NSCoding
     {
         // Store the objects into the coder object
         aCoder.encode(self.title, forKey: "title")
+        aCoder.encode(self.notes, forKey: "notes")
         aCoder.encode(self.done, forKey: "done")
     }
     
 }
 
+/* Mock data
 extension ToDoItem
 {
     public class func getMockData() -> [ToDoItem]
@@ -65,7 +88,7 @@ extension ToDoItem
             ToDoItem(title: "Dog food")
         ]
     }
-}
+}*/
 
 extension Collection where Iterator.Element == ToDoItem
 {

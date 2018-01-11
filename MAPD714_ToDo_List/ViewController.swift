@@ -8,9 +8,9 @@
 
 import UIKit
 
-private var todoItems = [ToDoItem]()
-
 class ViewController: UITableViewController {
+    
+    private var todoItems = [ToDoItem]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +19,37 @@ class ViewController: UITableViewController {
         self.title = "RememBR"
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ViewController.didTapAddItemButton(_:)))
         
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(UIApplicationDelegate.applicationDidEnterBackground(_:)),
+            name: NSNotification.Name.UIApplicationDidEnterBackground,
+            object: nil)
+        
+        do
+        {
+            // Try to load from persistence
+            self.todoItems = try [ToDoItem].readFromPersistence()
+        }
+        catch let error as NSError
+        {
+            if error.domain == NSCocoaErrorDomain && error.code == NSFileReadNoSuchFileError
+            {
+                NSLog("No persistence file found, not necesserially an error...")
+            }
+            else
+            {
+                let alert = UIAlertController(
+                    title: "Error",
+                    message: "Could not load the to-do items!",
+                    preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                
+                self.present(alert, animated: true, completion: nil)
+                
+                NSLog("Error loading from persistence: \(error)")
+            }
+        }
         
         
         
@@ -51,7 +82,7 @@ class ViewController: UITableViewController {
         
         return cell
     }
-    
+  /*
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -63,11 +94,12 @@ class ViewController: UITableViewController {
             
             tableView.reloadRows(at: [indexPath], with: .automatic)
         }
-    }
+    }*/
     
     @objc func didTapAddItemButton(_ sender:UIBarButtonItem)
     {
-        //Create Alert
+        //Create Alert for tittle
+        
         let alert = UIAlertController(title: "New to-do item", message: "Insert the title of the new to-do item", preferredStyle: .alert)
         
         //Add text field for the new item
@@ -94,18 +126,63 @@ class ViewController: UITableViewController {
         let newIndex = todoItems.count
         
         //New item
-        todoItems.append(ToDoItem(title: title))
+        todoItems.append(ToDoItem(title: title, notes: ""))
         
         //Tell the table view
         tableView.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .top)
     }
-    
+
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath)
     {
         if indexPath.row < todoItems.count
         {
             todoItems.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .top)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let tableViewCell = sender as! UITableViewCell
+        let indexPath = tableView.indexPath(for: tableViewCell)!
+        let toDo = todoItems[indexPath.row]
+        
+        if segue.identifier == "ShowToDoDetails"{
+            let detailsVC = segue.destination as! DetailViewController
+            
+            detailsVC.toDo = toDo
+        }else{
+            //error
+        }
+/*
+        let tableViewCell = sender as! UITableViewCell
+        let indexPath = tableView.indexPath(for: tableViewCell)!
+        let font = fontForDisplay(atIndexPath: indexPath as NSIndexPath)
+        
+        if segue.identifier == "ShowFontSizes" {
+            let sizesVC = segue.destination as! FontSizesViewController
+            sizesVC.title = font.fontName
+            sizesVC.font = font
+        } else {
+            let infoVC = segue.destination as! FontInfoViewController
+            infoVC.title = font.fontName
+            infoVC.font = font
+            infoVC.favourite = FavouritesList.SharedFavouritesList.favourites.contains(font.fontName)
+        }
+        
+        */
+        
+    }
+    
+    @objc
+    public func applicationDidEnterBackground(_ notification: NSNotification)
+    {
+        do
+        {
+            try todoItems.writeToPersistence()
+        }
+        catch let error
+        {
+            NSLog("Error writing to persistence: \(error)")
         }
     }
     
