@@ -129,7 +129,8 @@ class ViewController: UITableViewController {
     {
         if indexPath.row < ToDoItem.todoItems.count
         {
-            ToDoItem.todoItems.remove(at: indexPath.row)
+            ToDoItem.removeRow(Row: indexPath.row)
+            //refresh table
             tableView.deleteRows(at: [indexPath], with: .top)
         }
     }

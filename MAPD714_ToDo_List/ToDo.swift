@@ -114,6 +114,12 @@ class ToDoItem: NSObject, NSCoding
         //toDo.encode(with: "title", "notes", "done")
         ToDoItem.writePersistence()
     }
+    
+    static func removeRow(Row row: Int){
+        todoItems.remove(at: row)
+        ToDoItem.writePersistence()
+    }
+    
 }
 
 /* Mock data
