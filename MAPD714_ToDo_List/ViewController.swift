@@ -41,6 +41,12 @@ class ViewController: UITableViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
+        
+    }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -137,6 +143,7 @@ class ViewController: UITableViewController {
             let detailsVC = segue.destination as! DetailViewController
             
             detailsVC.toDo = toDo
+            detailsVC.row = indexPath.row
         }else{
             //error
         }

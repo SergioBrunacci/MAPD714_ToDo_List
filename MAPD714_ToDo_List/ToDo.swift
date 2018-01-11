@@ -108,7 +108,12 @@ class ToDoItem: NSObject, NSCoding
         }
     }
     
-    
+    static func updateRow(Row row: Int, ToDoItem toDo: ToDoItem){
+        //toDo persist data
+        todoItems[row] = toDo
+        //toDo.encode(with: "title", "notes", "done")
+        ToDoItem.writePersistence()
+    }
 }
 
 /* Mock data

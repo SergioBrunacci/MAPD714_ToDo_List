@@ -10,7 +10,7 @@ import UIKit
 
 class DetailViewController: UIViewController {
     
-    
+    var row = 0
     
     var toDo: ToDoItem = ToDoItem(title:"RememBR", notes:"")
     
@@ -22,10 +22,10 @@ class DetailViewController: UIViewController {
     
     
     @IBAction func updateButton(_ sender: UIButton) {
-        //toDo persist data
+        
         toDo.title = titleLabel.text!
         toDo.notes = notesLabel.text
-        //toDo.encode(with: "title", "notes", "done")
+        ToDoItem.updateRow(Row: row, ToDoItem: toDo)
         
         
     }
