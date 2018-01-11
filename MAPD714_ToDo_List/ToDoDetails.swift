@@ -1,14 +1,14 @@
 //
-//  ToDo.swift
+//  ToDoDetails.swift
 //  MAPD714_ToDo_List
 //
-//  Created by Sergio de Almeida Brunacci on 2018-01-08.
+//  Created by Sergio de Almeida Brunacci on 2018-01-10.
 //  Copyright © 2018 Centennial College. All rights reserved.
 //
 
 import Foundation
 
-class ToDoItem: NSObject, NSCoding
+class ToDoDetail: NSObject, NSCoding
 {
     var title: String
     var done: Bool
@@ -51,23 +51,22 @@ class ToDoItem: NSObject, NSCoding
         aCoder.encode(self.title, forKey: "title")
         aCoder.encode(self.done, forKey: "done")
     }
-    
 }
 
-extension ToDoItem
+extension ToDoDetail
 {
-    public class func getMockData() -> [ToDoItem]
+    public class func getMockData() -> [ToDoDetail]
     {
         return [
-            ToDoItem(title: "Milk"),
-            ToDoItem(title: "Chocolate"),
-            ToDoItem(title: "Light bulb"),
-            ToDoItem(title: "Dog food")
+            ToDoDetail(title: "Milk"),
+            ToDoDetail(title: "Chocolate"),
+            ToDoDetail(title: "Light bulb"),
+            ToDoDetail(title: "Dog food")
         ]
     }
 }
 
-extension Collection where Iterator.Element == ToDoItem
+extension Collection where Iterator.Element == ToDoDetail
 {
     // Builds the persistence URL. This is a location inside
     // the "Application Support" directory for the App.
@@ -79,7 +78,7 @@ extension Collection where Iterator.Element == ToDoItem
             appropriateFor: nil,
             create: true)
         
-        return url?.appendingPathComponent("todoitems.bin")
+        return url?.appendingPathComponent("tododetails.bin")
     }
     
     // Write the array to persistence
