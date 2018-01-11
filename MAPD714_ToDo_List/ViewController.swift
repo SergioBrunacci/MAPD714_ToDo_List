@@ -178,16 +178,31 @@ class ViewController: UITableViewController {
     override func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
-        let closeAction = UIContextualAction(style: .normal, title:  "Complete", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            print("OK, marked as Closed")
-            ToDoItem.completeRow(Row:indexPath.row)
+        let isCompleted: Bool = ToDoItem.isCompleted(Row: indexPath.row)
+        var title : String;
+        var cellColor : UIColor;
+        var buttonColor: UIColor;
+        
+        if isCompleted {
+            title = "Redo"
+            cellColor = .white
+            buttonColor = .orange
+        } else {
+            title = "Complete"
+            cellColor = .green
+            buttonColor = .green
+        }
+        
+        let closeAction = UIContextualAction(style: .normal, title: title, handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+            print("Completion Toggled")
+            ToDoItem.toggleCompletionRow(Row:indexPath.row)
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell_todo", for: indexPath)
-            cell.backgroundColor = .green
+            cell.contentView.backgroundColor = cellColor
             self.tableView.reloadData()
             success(true)
         })
         closeAction.image = UIImage(named: "tick")
-        closeAction.backgroundColor = .green
+        closeAction.backgroundColor = buttonColor
         
         return UISwipeActionsConfiguration(actions: [closeAction])
         

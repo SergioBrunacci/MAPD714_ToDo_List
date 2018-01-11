@@ -120,11 +120,14 @@ class ToDoItem: NSObject, NSCoding
         ToDoItem.writePersistence()
     }
     
-    static func completeRow(Row row: Int){
-        todoItems[row].done=true
+    static func toggleCompletionRow(Row row: Int){
+        todoItems[row].done = !todoItems[row].done
         ToDoItem.writePersistence()
     }
     
+    static func isCompleted(Row row: Int) -> Bool{
+        return todoItems[row].done
+    }
 }
 
 /* Mock data
