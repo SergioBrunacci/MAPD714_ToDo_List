@@ -10,7 +10,9 @@ import Foundation
 
 class ToDoItem: NSObject, NSCoding
 {
-    static let sharedToDoList = [ToDoItem]()
+    //static let sharedToDoList = [ToDoItem]()
+    
+    public static var todoItems = [ToDoItem]()
     
     
     
@@ -73,6 +75,39 @@ class ToDoItem: NSObject, NSCoding
         aCoder.encode(self.notes, forKey: "notes")
         aCoder.encode(self.done, forKey: "done")
     }
+    
+    static func loadPersistence() -> Bool{
+        do
+        {
+            // Try to load from persistence
+            self.todoItems = try [ToDoItem].readFromPersistence()
+        }
+        catch let error as NSError
+        {
+            if error.domain == NSCocoaErrorDomain && error.code == NSFileReadNoSuchFileError
+            {
+                NSLog("No persistence file found, not necesserially an error...")
+            }
+            else
+            {
+                NSLog("Error loading from persistence: \(error)")
+                return true
+            }
+        }
+        return false
+    }
+    
+    static func writePersistence(){
+        do
+        {
+            try todoItems.writeToPersistence()
+        }
+        catch let error
+        {
+            NSLog("Error writing to persistence: \(error)")
+        }
+    }
+    
     
 }
 
