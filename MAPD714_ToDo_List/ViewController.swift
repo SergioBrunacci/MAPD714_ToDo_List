@@ -25,6 +25,13 @@ class ViewController: UITableViewController {
             name: NSNotification.Name.UIApplicationDidEnterBackground,
             object: nil)
         
+        self.loadPersistence()
+        
+        
+        
+    }
+    
+    func loadPersistence(){
         do
         {
             // Try to load from persistence
@@ -50,9 +57,6 @@ class ViewController: UITableViewController {
                 NSLog("Error loading from persistence: \(error)")
             }
         }
-        
-        
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -176,6 +180,10 @@ class ViewController: UITableViewController {
     @objc
     public func applicationDidEnterBackground(_ notification: NSNotification)
     {
+        self.writePersistence()
+    }
+    
+    func writePersistence(){
         do
         {
             try todoItems.writeToPersistence()
