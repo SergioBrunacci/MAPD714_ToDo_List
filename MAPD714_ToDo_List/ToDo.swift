@@ -1,36 +1,29 @@
 //
 //  ToDo.swift
 //  MAPD714_ToDo_List
-//
-//  Created by Sergio de Almeida Brunacci on 2018-01-08.
-//  Copyright © 2018 Centennial College. All rights reserved.
-//
+//  RememBR App
+//  Sergio de Almeida Brunacci - 300910506
+//  Rafael Timbo Matos - 300962678
+//  Main ToDo Class that manage the ToDo properties and functionalities. Responsable for ToDo's Persistence
 
 import Foundation
 
 class ToDoItem: NSObject, NSCoding
 {
-    //static let sharedToDoList = [ToDoItem]()
-    
     public static var todoItems = [ToDoItem]()
-    
-    
-    
+
     var title: String
     var notes: String
     var done: Bool
     
-    
-    
     public init(title: String, notes: String)
     {
-        
-        
         self.title = title
         self.notes = notes
         self.done = false
     }
     
+    // init required by NSCoding
     required init?(coder aDecoder: NSCoder)
     {
         // Try to unserialize the "title" variable
@@ -68,6 +61,7 @@ class ToDoItem: NSObject, NSCoding
         }
     }
     
+    // save the todo
     func encode(with aCoder: NSCoder)
     {
         // Store the objects into the coder object
@@ -76,6 +70,7 @@ class ToDoItem: NSObject, NSCoding
         aCoder.encode(self.done, forKey: "done")
     }
     
+    // load all todos from file, returns true on error
     static func loadPersistence() -> Bool{
         do
         {
@@ -97,6 +92,7 @@ class ToDoItem: NSObject, NSCoding
         return false
     }
     
+    // save all todos to file
     static func writePersistence(){
         do
         {
@@ -108,6 +104,7 @@ class ToDoItem: NSObject, NSCoding
         }
     }
     
+    // update a todo persistently
     static func updateRow(Row row: Int, ToDoItem toDo: ToDoItem){
         //toDo persist data
         todoItems[row] = toDo
@@ -115,16 +112,19 @@ class ToDoItem: NSObject, NSCoding
         ToDoItem.writePersistence()
     }
     
+    // delete a todo permanently
     static func removeRow(Row row: Int){
         todoItems.remove(at: row)
         ToDoItem.writePersistence()
     }
     
+    // change completion status of a todo persistently
     static func toggleCompletionRow(Row row: Int){
         todoItems[row].done = !todoItems[row].done
         ToDoItem.writePersistence()
     }
     
+    // return completion status of a todo
     static func isCompleted(Row row: Int) -> Bool{
         return todoItems[row].done
     }

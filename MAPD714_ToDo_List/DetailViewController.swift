@@ -1,61 +1,37 @@
-//
 //  DetailViewController.swift
 //  MAPD714_ToDo_List
-//
-//  Created by Sergio de Almeida Brunacci on 2018-01-10.
-//  Copyright © 2018 Centennial College. All rights reserved.
-//
+//  RememBR App
+//  Sergio de Almeida Brunacci - 300910506
+//  Rafael Timbo Matos - 300962678
+//  DetailViewController: Display details of a todo and edit them
 
 import UIKit
 
 class DetailViewController: UIViewController {
     
-    var row = 0
+    var row: Int = 0
     
     var toDo: ToDoItem = ToDoItem(title:"RememBR", notes:"")
     
-    
+    // todo's title
     @IBOutlet weak var titleLabel: UITextField!
     
-    
+    // todo's notes
     @IBOutlet weak var notesLabel: UITextView!
     
-    
+   
+    // update the todo
     @IBAction func updateButton(_ sender: UIButton) {
-        
         toDo.title = titleLabel.text!
         toDo.notes = notesLabel.text
         ToDoItem.updateRow(Row: row, ToDoItem: toDo)
-        
-        
     }
-    
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // display the todo
         titleLabel.text = toDo.title
         notesLabel.text = toDo.notes
-
-        // Do any additional setup after loading the view.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-
 }

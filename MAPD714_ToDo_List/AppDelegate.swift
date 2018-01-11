@@ -1,9 +1,8 @@
-//
+//  RememBR App
 //  AppDelegate.swift
 //  MAPD714_ToDo_List
-//
-//  Created by Sergio de Almeida Brunacci on 2018-01-08.
-//  Copyright © 2018 Centennial College. All rights reserved.
+//  Sergio de Almeida Brunacci - 300910506
+//  Rafael Timbo Matos - 300962678
 //
 
 import UIKit

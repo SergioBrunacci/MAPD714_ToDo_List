@@ -1,30 +1,31 @@
 //
 //  ViewController.swift
 //  MAPD714_ToDo_List
-//
-//  Created by Sergio de Almeida Brunacci on 2018-01-08.
-//  Copyright © 2018 Centennial College. All rights reserved.
-//
+//  RememBR App
+//  Sergio de Almeida Brunacci - 300910506
+//  Rafael Timbo Matos - 300962678
+//  View controller that lists the ToDos
 
 import UIKit
 
 class ViewController: UITableViewController {
-    
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
         self.title = "RememBR"
+        
+        // set up add button
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ViewController.didTapAddItemButton(_:)))
         
+        // notify if the app is going to background so we save the todos
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(UIApplicationDelegate.applicationDidEnterBackground(_:)),
             name: NSNotification.Name.UIApplicationDidEnterBackground,
             object: nil)
         
+        // load all todos from file and display an alert on error
         if ToDoItem.loadPersistence(){
             let alert = UIAlertController(
                 title: "Error",
@@ -37,10 +38,9 @@ class ViewController: UITableViewController {
             
         }
         
-        
-        
     }
     
+    // refresh todos on screen reappearance ( specially when coming back from a todo detail view)
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
@@ -69,25 +69,14 @@ class ViewController: UITableViewController {
             let item = ToDoItem.todoItems[indexPath.row]
             cell.textLabel?.text = item.title
             
+            // display checkmark for completed todos
             let accessory: UITableViewCellAccessoryType = item.done ? .checkmark : .none
             cell.accessoryType = accessory
         }
         
         return cell
     }
-  /*
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
-    {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        if indexPath.row < todoItems.count
-        {
-            let item = todoItems[indexPath.row]
-            item.done = !item.done
-            
-            tableView.reloadRows(at: [indexPath], with: .automatic)
-        }
-    }*/
+
     
     @objc func didTapAddItemButton(_ sender:UIBarButtonItem)
     {
@@ -129,18 +118,19 @@ class ViewController: UITableViewController {
     {
         if indexPath.row < ToDoItem.todoItems.count
         {
+            // delete todo at row indexPath.row
             ToDoItem.removeRow(Row: indexPath.row)
-            //refresh table
             tableView.deleteRows(at: [indexPath], with: .top)
         }
     }
     
+    // pass todo to DetailViewController
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let tableViewCell = sender as! UITableViewCell
         let indexPath = tableView.indexPath(for: tableViewCell)!
         let toDo = ToDoItem.todoItems[indexPath.row]
         
-        if segue.identifier == "ShowToDoDetails"{
+        if segue.identifier == "ShowToDoDetails" {
             let detailsVC = segue.destination as! DetailViewController
             
             detailsVC.toDo = toDo
@@ -148,26 +138,10 @@ class ViewController: UITableViewController {
         }else{
             //error
         }
-/*
-        let tableViewCell = sender as! UITableViewCell
-        let indexPath = tableView.indexPath(for: tableViewCell)!
-        let font = fontForDisplay(atIndexPath: indexPath as NSIndexPath)
-        
-        if segue.identifier == "ShowFontSizes" {
-            let sizesVC = segue.destination as! FontSizesViewController
-            sizesVC.title = font.fontName
-            sizesVC.font = font
-        } else {
-            let infoVC = segue.destination as! FontInfoViewController
-            infoVC.title = font.fontName
-            infoVC.font = font
-            infoVC.favourite = FavouritesList.SharedFavouritesList.favourites.contains(font.fontName)
-        }
-        
-        */
         
     }
     
+    // save todos when the application goes to background
     @objc
     public func applicationDidEnterBackground(_ notification: NSNotification)
     {
@@ -175,6 +149,7 @@ class ViewController: UITableViewController {
     }
     
     
+    // toggle completion status of a todo
     override func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
